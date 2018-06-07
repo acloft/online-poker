@@ -33,12 +33,37 @@ class GameBoard extends React.Component {
         }
         return {
           deck: shuffledDeck,
-          currentHand: currentHand, 
+          currentHand: currentHand,
           buttonMessage: "Go"
         };
       });
-    }{
-        this.setState({buttonMessage: "Deal"})
+    } else {
+      this.setState(prevState => {
+        const updatedDeck = prevState.deck;
+        const newHand = prevState.currentHand.reduce((all, card, index) => {
+          if (prevState.cardsToDiscardByIndex[index]) {
+            let newCard = updatedDeck.shift();
+            all.push(newCard);
+            updatedDeck.push(newCard);
+          } else {
+            all.push(card);
+          }
+          return all;
+        }, []);
+        return {
+          deck: updatedDeck, 
+          currentHand: newHand,
+          cardsToDiscardByIndex: {
+            0: false,
+            1: false,
+            2: false,
+            3: false,
+            4: false
+          }, 
+          buttonMessage: "Deal"
+
+        };
+      });
     }
   }
 
@@ -69,10 +94,9 @@ class GameBoard extends React.Component {
         let cardsToDiscardByIndex = prevState.cardsToDiscardByIndex;
         if (prevState.cardsToDiscardByIndex[index]) {
           //remove it
-          cardsToDiscardByIndex[index] = false
-          ;
+          cardsToDiscardByIndex[index] = false;
         } else {
-          cardsToDiscardByIndex[index] = true
+          cardsToDiscardByIndex[index] = true;
         }
         return { cardsToDiscardByIndex };
       });
