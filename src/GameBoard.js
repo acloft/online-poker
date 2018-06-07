@@ -1,5 +1,5 @@
 import React from "react";
-import ScoreCard from './ScoreCard'
+import ScoreCard from "./ScoreCard";
 
 class GameBoard extends React.Component {
   constructor(props) {
@@ -20,6 +20,7 @@ class GameBoard extends React.Component {
     };
     this.dealOrGo = this.dealOrGo.bind(this);
     this.markForDiscard = this.markForDiscard.bind(this);
+    this.drawCards = this.drawCards.bind(this);
   }
 
   dealOrGo() {
@@ -31,12 +32,12 @@ class GameBoard extends React.Component {
           let card = shuffledDeck.shift();
           currentHand.push(card);
           shuffledDeck.push(card);
-          //save the first five cards to an array and then put them on the bottom of the deck
+          //save the first five cards to an array and then "put" them on the bottom of the deck
         }
         return {
           deck: shuffledDeck,
           currentHand: currentHand,
-          buttonMessage: "Go", 
+          buttonMessage: "Go",
           showScore: false
         };
       });
@@ -53,9 +54,8 @@ class GameBoard extends React.Component {
           }
           return all;
         }, []);
-        // calculate score
         return {
-          deck: updatedDeck, 
+          deck: updatedDeck,
           currentHand: newHand,
           cardsToDiscardByIndex: {
             0: false,
@@ -63,7 +63,7 @@ class GameBoard extends React.Component {
             2: false,
             3: false,
             4: false
-          }, 
+          },
           buttonMessage: "Deal",
           showScore: true
         };
@@ -94,43 +94,64 @@ class GameBoard extends React.Component {
 
   markForDiscard(index) {
     return () => {
-      if(this.state.buttonMessage === 'Go'){
+      if (this.state.buttonMessage === "Go") {
         this.setState(prevState => {
-            let cardsToDiscardByIndex = prevState.cardsToDiscardByIndex;
-            if (prevState.cardsToDiscardByIndex[index]) {
-              //remove it
-              cardsToDiscardByIndex[index] = false;
-            } else {
-              cardsToDiscardByIndex[index] = true;
-            }
-            return { cardsToDiscardByIndex };
-          });
+          let cardsToDiscardByIndex = prevState.cardsToDiscardByIndex;
+          if (prevState.cardsToDiscardByIndex[index]) {
+            //remove it
+            cardsToDiscardByIndex[index] = false;
+          } else {
+            cardsToDiscardByIndex[index] = true;
+          }
+          return { cardsToDiscardByIndex };
+        });
       }
     };
+  }
+
+  drawCards(cards) {
+    return cards.map((card, index) => {
+              return (
+        <div
+          key={card.value + card.suite}
+          className={
+            card.suite === "Hearts" || card.suite ==="Diamonds"
+              ? "col-sm-2 card red"
+              : "col-sm-2 card"
+          }
+          onClick={this.markForDiscard(index)}
+        >
+          {this.convertCardValue(card)} {card.suite}
+          
+          {this.state.cardsToDiscardByIndex[index] ? <h3 style={{color: "black"}}> discard!</h3> : null}
+        </div>
+      );
+    });
+  }
+
+  convertCardValue(card) {
+    if (card.value < 11) {
+      return card.value.toString();
+    } else if (card.value === 11) {
+      return  "Joker";
+    } else if (card.value === 12) {
+        return "Queen";
+    } else if (card.value === 13) {
+        return  "King";
+    } else if (card.value === 14) {
+        return "Ace";
+    }
   }
 
   render() {
     return (
       <React.Fragment>
         <h1> Let's play </h1>
-        {this.state.showScore &&<ScoreCard hand={this.state.currentHand}/>}
+        {this.state.showScore && <ScoreCard hand={this.state.currentHand} />}
         <div className="row">
           <div className="col" />
           {this.state.currentHand.length > 0 &&
-            this.state.currentHand.map((card, index) => {
-              return (
-                <div
-                  key={card.value + card.suite}
-                  className="col-sm-2 card"
-                  onClick={this.markForDiscard(index)}
-                >
-                  {card.value} {card.suite}
-                  {this.state.cardsToDiscardByIndex[index] ? (
-                    <h1> discard!</h1>
-                  ) : null}
-                </div>
-              );
-            })}
+            this.drawCards(this.state.currentHand)}
           <div className="col" />
         </div>
         <button className="btn btn-success" onClick={this.dealOrGo}>
