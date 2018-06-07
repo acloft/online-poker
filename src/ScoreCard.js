@@ -18,8 +18,8 @@ class ScoreCard extends React.Component {
       if (!handObj[sortedHand[i].value]) {
         handObj[sortedHand[i].value] = sortedHand[i].suite;
       } else {
-        if (score < 51) {
-          score = 50;
+        if (score < 100) {
+          score = 100;
         }
       }
       if (sortedHand[i].value - 1 !== sortedHand[i - 1].value) {
