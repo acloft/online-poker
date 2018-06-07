@@ -1,4 +1,5 @@
 import React from "react";
+import ScoreCard from './ScoreCard'
 
 class GameBoard extends React.Component {
   constructor(props) {
@@ -14,7 +15,8 @@ class GameBoard extends React.Component {
         2: false,
         3: false,
         4: false
-      }
+      },
+      showScore: false
     };
     this.dealOrGo = this.dealOrGo.bind(this);
     this.markForDiscard = this.markForDiscard.bind(this);
@@ -34,7 +36,8 @@ class GameBoard extends React.Component {
         return {
           deck: shuffledDeck,
           currentHand: currentHand,
-          buttonMessage: "Go"
+          buttonMessage: "Go", 
+          showScore: false
         };
       });
     } else {
@@ -50,6 +53,7 @@ class GameBoard extends React.Component {
           }
           return all;
         }, []);
+        // calculate score
         return {
           deck: updatedDeck, 
           currentHand: newHand,
@@ -60,8 +64,8 @@ class GameBoard extends React.Component {
             3: false,
             4: false
           }, 
-          buttonMessage: "Deal"
-
+          buttonMessage: "Deal",
+          showScore: true
         };
       });
     }
@@ -90,16 +94,18 @@ class GameBoard extends React.Component {
 
   markForDiscard(index) {
     return () => {
-      this.setState(prevState => {
-        let cardsToDiscardByIndex = prevState.cardsToDiscardByIndex;
-        if (prevState.cardsToDiscardByIndex[index]) {
-          //remove it
-          cardsToDiscardByIndex[index] = false;
-        } else {
-          cardsToDiscardByIndex[index] = true;
-        }
-        return { cardsToDiscardByIndex };
-      });
+      if(this.state.buttonMessage === 'Go'){
+        this.setState(prevState => {
+            let cardsToDiscardByIndex = prevState.cardsToDiscardByIndex;
+            if (prevState.cardsToDiscardByIndex[index]) {
+              //remove it
+              cardsToDiscardByIndex[index] = false;
+            } else {
+              cardsToDiscardByIndex[index] = true;
+            }
+            return { cardsToDiscardByIndex };
+          });
+      }
     };
   }
 
@@ -107,6 +113,7 @@ class GameBoard extends React.Component {
     return (
       <React.Fragment>
         <h1> Let's play </h1>
+        {this.state.showScore &&<ScoreCard hand={this.state.currentHand}/>}
         <div className="row">
           <div className="col" />
           {this.state.currentHand.length > 0 &&
