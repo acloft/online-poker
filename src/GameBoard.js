@@ -33,9 +33,12 @@ class GameBoard extends React.Component {
         }
         return {
           deck: shuffledDeck,
-          currentHand: currentHand
+          currentHand: currentHand, 
+          buttonMessage: "Go"
         };
       });
+    }{
+        this.setState({buttonMessage: "Deal"})
     }
   }
 
