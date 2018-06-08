@@ -1,5 +1,4 @@
 import React from "react";
-import ScoreCard from "./ScoreCard";
 
 class GameBoard extends React.Component {
   constructor(props) {
@@ -38,7 +37,7 @@ class GameBoard extends React.Component {
           deck: shuffledDeck,
           currentHand: currentHand,
           buttonMessage: "Go",
-          showScore: false
+          finalScore: false
         };
       });
     } else {
@@ -65,7 +64,7 @@ class GameBoard extends React.Component {
             4: false
           },
           buttonMessage: "Deal",
-          showScore: true
+          finalScore: true
         };
       });
     }
@@ -123,7 +122,7 @@ class GameBoard extends React.Component {
         >
           {this.convertCardValue(card)} {card.suite}
           {this.state.cardsToDiscardByIndex[index] ? (
-            <h3 style={{ color: "black" }}> discard!</h3>
+            <label style={{ color: "black" }}> discard!</label>
           ) : null}
         </div>
       );
@@ -144,49 +143,66 @@ class GameBoard extends React.Component {
     }
   }
 
-  addSuiteIcon(suite){
-      if(suite === "Hearts"){
-        return <span className="fa fa-heart"></span>
-      } 
-      else if(suite === "Diamonds"){
-        return <span className="fa fa-gem"></span>
+
+  scoreHand(hand) {
+    if (hand.length === 5) {
+      const sortedHand = hand.sort((a, b) => a.value - b.value);
+      const handObj = {};
+      let score = 0;
+      let straight = true;
+      for (let i = 0; i < 5; i++) {
+        // this checks for pairs
+        if (handObj[sortedHand[i].value]) {
+          score = 100;
+        } else {
+          handObj[sortedHand[i].value] = true;
+        }
       }
-      else if(suite === "Clubs"){
-        return <span className="fa fa-club"></span>
+      for (let i = 1; i < 5; i++) {
+        // this looks for straights - still need to figure out how to read ace as high and low
+        if (sortedHand[i].value - 1 !== sortedHand[i - 1].value) {
+          straight = false;
+        }
       }
-      else{
-          return <span className="fa fa-spade"></span>
+      if (straight) {
+        score = 500;
       }
+      return score;
+    } else {
+      return 0;
+    }
   }
 
   render() {
     return (
-        <React.Fragment>
-      <div className="jumbotron gameBoard">
-        <h1 className="text-center"> Let's play poker!</h1>
-        <span className="fa fa-home"></span>
-        <div className="row">
-          <div className="col" />
-          {this.state.currentHand.length > 0 &&
-            this.drawCards(this.state.currentHand)}
-          <div className="col" />
-        </div>
-        <div className="row text-center">
-          <div className="col align-content-bottom">
-           
+      <React.Fragment>
+        <div className="jumbotron gameBoard">
+          <h1 className="text-center"> Let's play poker!</h1>
+          <p>
+            {" "}
+            {this.state.finalScore ? `Final Score` : `Score`}:{" "}
+            {this.scoreHand(this.state.currentHand)}
+          </p>
+          <div className="row">
+            <div className="col" />
+            {this.state.currentHand.length > 0 &&
+              this.drawCards(this.state.currentHand)}
+            <div className="col" />
+          </div>
+          <div className="row text-center">
+            <div className="col align-content-bottom" />
           </div>
         </div>
-      </div>
-      <button
-              className="btn btn-success"
-              onClick={this.dealOrGo}
-              style={{
-                display: "inline-block",
-                "vertical-align": "middle"
-              }}
-            >
-              {this.state.buttonMessage}
-            </button>
+        <button
+          className="btn btn-success"
+          onClick={this.dealOrGo}
+          style={{
+            display: "inline-block",
+            "vertical-align": "middle"
+          }}
+        >
+          {this.state.buttonMessage}
+        </button>
       </React.Fragment>
     );
   }
