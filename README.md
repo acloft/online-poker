@@ -1,4 +1,4 @@
-## Online Poker
+# Online Poker
 Poker simulation hosted through Heroku - https://abbys-online-poker.herokuapp.com/
 
 # To Play: 
