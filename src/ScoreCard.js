@@ -1,6 +1,6 @@
 import React from "react";
 
-class ScoreCard extends React.Component {
+class Score extends React.Component {
   constructor(props) {
     super(props);
     const score = this.scoreHand(props.hand);
@@ -35,8 +35,14 @@ class ScoreCard extends React.Component {
   }
 
   render() {
-    return <React.Fragment>{this.scoreHand(this.props.hand)}</React.Fragment>;
+    return <React.Fragment>
+        <div>
+        Score: {this.scoreHand(this.props.hand)}
+        </div>
+      </React.Fragment>;
   }
 }
 
-export default ScoreCard;
+export default Score;
+
+

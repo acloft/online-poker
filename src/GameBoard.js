@@ -111,19 +111,20 @@ class GameBoard extends React.Component {
 
   drawCards(cards) {
     return cards.map((card, index) => {
-              return (
+      return (
         <div
           key={card.value + card.suite}
           className={
-            card.suite === "Hearts" || card.suite ==="Diamonds"
+            card.suite === "Hearts" || card.suite === "Diamonds"
               ? "col-sm-2 card red"
               : "col-sm-2 card"
           }
           onClick={this.markForDiscard(index)}
         >
           {this.convertCardValue(card)} {card.suite}
-          
-          {this.state.cardsToDiscardByIndex[index] ? <h3 style={{color: "black"}}> discard!</h3> : null}
+          {this.state.cardsToDiscardByIndex[index] ? (
+            <h3 style={{ color: "black" }}> discard!</h3>
+          ) : null}
         </div>
       );
     });
@@ -133,31 +134,51 @@ class GameBoard extends React.Component {
     if (card.value < 11) {
       return card.value.toString();
     } else if (card.value === 11) {
-      return  "Joker";
+      return "Joker";
     } else if (card.value === 12) {
-        return "Queen";
+      return "Queen";
     } else if (card.value === 13) {
-        return  "King";
+      return "King";
     } else if (card.value === 14) {
-        return "Ace";
+      return "Ace";
     }
   }
 
   render() {
     return (
-      <React.Fragment>
-        <h1> Let's play </h1>
-        {this.state.showScore && <ScoreCard hand={this.state.currentHand} />}
+      <div className="jumbotron gameBoard">
+        <h1 className="text-center"> Let's play poker!</h1>
+        <div className="row">
+          <div className="col">
+            {this.state.showScore ? (
+              <ScoreCard hand={this.state.currentHand} />
+            ) : (
+              <p className="text-center"> Score: 0</p>
+            )}
+          </div>
+        </div>
+
         <div className="row">
           <div className="col" />
           {this.state.currentHand.length > 0 &&
             this.drawCards(this.state.currentHand)}
           <div className="col" />
         </div>
-        <button className="btn btn-success" onClick={this.dealOrGo}>
-          {this.state.buttonMessage}
-        </button>
-      </React.Fragment>
+        <div className="row text-center">
+          <div className="col align-content-bottom">
+            <button
+              className="btn btn-success"
+              onClick={this.dealOrGo}
+              style={{
+                display: "inline-block",
+                "vertical-align": "middle"
+              }}
+            >
+              {this.state.buttonMessage}
+            </button>
+          </div>
+        </div>
+      </div>
     );
   }
 
