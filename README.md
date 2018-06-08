@@ -1,5 +1,5 @@
-## Online Poker
-Poker simulation hosted through Heroku.
+# Online Poker
+Poker simulation hosted through Heroku - https://abbys-online-poker.herokuapp.com/
 
 # To Play: 
 Start by pressing deal! You'll see the current score of your cards at the top. If you'd like to discard any of them, click them to mark for remove. Once you've chosen, press Go and your new cards will be dealt and your final score calculated!

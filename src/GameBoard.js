@@ -198,7 +198,7 @@ class GameBoard extends React.Component {
           onClick={this.dealOrGo}
           style={{
             display: "inline-block",
-            "vertical-align": "middle"
+            "verticalAlign": "middle"
           }}
         >
           {this.state.buttonMessage}
