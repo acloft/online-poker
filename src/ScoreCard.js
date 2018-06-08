@@ -26,7 +26,6 @@ class Score extends React.Component {
         straight = false;
       }
     }
-
     if (straight) {
       score = 500;
     }

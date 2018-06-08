@@ -144,20 +144,27 @@ class GameBoard extends React.Component {
     }
   }
 
+  addSuiteIcon(suite){
+      if(suite === "Hearts"){
+        return <span className="fa fa-heart"></span>
+      } 
+      else if(suite === "Diamonds"){
+        return <span className="fa fa-gem"></span>
+      }
+      else if(suite === "Clubs"){
+        return <span className="fa fa-club"></span>
+      }
+      else{
+          return <span className="fa fa-spade"></span>
+      }
+  }
+
   render() {
     return (
+        <React.Fragment>
       <div className="jumbotron gameBoard">
         <h1 className="text-center"> Let's play poker!</h1>
-        <div className="row">
-          <div className="col">
-            {this.state.showScore ? (
-              <ScoreCard hand={this.state.currentHand} />
-            ) : (
-              <p className="text-center"> Score: 0</p>
-            )}
-          </div>
-        </div>
-
+        <span className="fa fa-home"></span>
         <div className="row">
           <div className="col" />
           {this.state.currentHand.length > 0 &&
@@ -166,7 +173,11 @@ class GameBoard extends React.Component {
         </div>
         <div className="row text-center">
           <div className="col align-content-bottom">
-            <button
+           
+          </div>
+        </div>
+      </div>
+      <button
               className="btn btn-success"
               onClick={this.dealOrGo}
               style={{
@@ -176,9 +187,7 @@ class GameBoard extends React.Component {
             >
               {this.state.buttonMessage}
             </button>
-          </div>
-        </div>
-      </div>
+      </React.Fragment>
     );
   }
 
